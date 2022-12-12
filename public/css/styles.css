@@ -1,0 +1,14 @@
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.container-categorie {
+    margin-top: 30px;
+}
+
+.btn-width {
+    width: 150px;
+}

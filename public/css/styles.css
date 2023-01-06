@@ -12,3 +12,11 @@
 .btn-width {
     width: 150px;
 }
+
+.form-delete {
+    display: inline;
+}
+
+.button-new-category {
+    margin: 15px 0;
+}

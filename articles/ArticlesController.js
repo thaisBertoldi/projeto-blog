@@ -27,7 +27,7 @@ router.post('/articles/save', (req, res) => {
     }).then(() => {
         res.redirect('/admin/articles');
     });
-})
+});
 
 router.post('/articles/delete', (req, res) => {
     const id = req.body.id;
@@ -72,6 +72,33 @@ router.post("/articles/update", (req, res) => {
     }).then(() => {
         res.redirect('/admin/articles');
     });
-})
+});
+
+router.get('/articles/page/:num', (req, res) => {
+    const page = req.params.num;
+    let offset = 0;
+    
+    if (!isNaN(page) || page !== 1) {
+        offset = parseInt(page) * 4;
+    }
+
+    Article.findAndCountAll({
+        limit: 4,
+        offset: offset,
+        order: [
+            ['id', 'DESC']
+        ],
+    }).then(articles => {
+        const next = offset + 4 < articles.count;
+        const result = {
+            page: parseInt(page),
+            next: next,
+            articles: articles
+        }
+        Category.findAll().then(categories => {
+            res.render('admin/articles/page', { result: result, categories: categories })
+        });
+    })
+});
 
 module.exports = router;

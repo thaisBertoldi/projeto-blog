@@ -7,6 +7,7 @@ const usersController = require('./user/UsersController');
 const Article = require('./articles/Article');
 const Category = require('./categories/Category');
 const User = require('./user/User');
+const session = require('express-session');
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -25,6 +26,11 @@ connection
 app.use('/', categoriesController);
 app.use('/', articlesController);
 app.use('/', usersController);
+
+app.use(session({
+  secret: 'techuptogetherprodigydigitalbusiness',
+  cookie: { maxAge: 30000 }
+}))
 
 app.get("/", (req, res) => {
   Article.findAll({

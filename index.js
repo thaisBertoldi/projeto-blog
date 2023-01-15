@@ -10,6 +10,12 @@ const User = require('./user/User');
 const session = require('express-session');
 
 app.set("view engine", "ejs");
+
+app.use(session({
+  secret: 'techuptogetherprodigydigitalbusiness',
+  cookie: { maxAge: 30000000 }
+}))
+
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -27,10 +33,18 @@ app.use('/', categoriesController);
 app.use('/', articlesController);
 app.use('/', usersController);
 
-app.use(session({
-  secret: 'techuptogetherprodigydigitalbusiness',
-  cookie: { maxAge: 30000 }
-}))
+app.get('/session', (req, res) => {
+  req.session.treinamento = 'Formacao node';
+  req.session.year = 2023;
+  res.send('Sessão gerada');
+});
+
+app.get('/read', (req, res) => {
+  res.json({
+    treinamento: req.session.treinamento,
+    ano: req.session.year
+  })
+});
 
 app.get("/", (req, res) => {
   Article.findAll({
@@ -52,7 +66,7 @@ app.get('/:slug', (req, res) => {
       slug: slug
     }
   }).then(article => {
-    if (article !== undefined) {
+    if (article) {
       Category.findAll().then(categories => {
         res.render('article', { article: article, categories: categories });
       });
@@ -81,7 +95,7 @@ app.get('/category/:slug', (req, res) => {
   }).catch(err => {
     res.redirect('/');
   })
-})
+});
 
 app.listen(8181, () => {
   console.log("Servidor rodando...");

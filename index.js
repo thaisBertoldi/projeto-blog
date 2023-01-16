@@ -33,20 +33,8 @@ app.use('/', categoriesController);
 app.use('/', articlesController);
 app.use('/', usersController);
 
-app.get('/session', (req, res) => {
-  req.session.treinamento = 'Formacao node';
-  req.session.year = 2023;
-  res.send('Sessão gerada');
-});
-
-app.get('/read', (req, res) => {
-  res.json({
-    treinamento: req.session.treinamento,
-    ano: req.session.year
-  })
-});
-
 app.get("/", (req, res) => {
+  const user = req.session.user;
   Article.findAll({
     order: [
       ['id', 'DESC']
@@ -54,7 +42,7 @@ app.get("/", (req, res) => {
     limit: 4
   }).then(articles => {
     Category.findAll().then(categories => {
-      res.render('index', { articles: articles, categories: categories });
+      res.render('index', { articles: articles, categories: categories, user: user });
     });
   })
 });
@@ -79,6 +67,7 @@ app.get('/:slug', (req, res) => {
 })
 
 app.get('/category/:slug', (req, res) => {
+  const user = req.session.user;
   Category.findOne({
     where: {
       slug: req.params.slug
@@ -87,7 +76,7 @@ app.get('/category/:slug', (req, res) => {
   }).then(category => {
     if (category !== undefined) {
       Category.findAll().then(categories => {
-        res.render('index', { articles: category.articles, categories: categories })
+        res.render('index', { articles: category.articles, categories: categories, user: user })
       });
     } else {
       res.redirect('/');

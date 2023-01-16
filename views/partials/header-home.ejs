@@ -7,9 +7,9 @@
     <title>Projeto Blog</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/styles.css">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark nav-pills nav-fill">
         <a class="navbar-brand" href="/">Página inicial</a>
-        <div class="navbar-nav">
+        <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Categorias
@@ -20,7 +20,16 @@
                     <% }) %>
                 </div>
               </li>
-        </div>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <% if(user) { %>
+                    <a href="/logout" class="navbar-brand">Logout</a>
+                <% } else { %>
+                    <a href="/login" class="nav-link">Login</a>
+                <% } %>
+            </li>
+        </ul>
         
     </nav>
 </head>

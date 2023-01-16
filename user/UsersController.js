@@ -54,4 +54,31 @@ router.post('/users/delete', (req, res) => {
     }
 });
 
+router.get('/login', (req, res) => {
+    res.render('admin/users/login');
+});
+
+router.post('/authenticate', (req, res) => {
+    User.findOne({
+        where: {
+            email: req.body.email
+        }
+    }).then(user => {
+        if (user && bcrypt.compareSync(req.body.password, user.password)) {
+            req.session.user = {
+                id: user.id,
+                email: user.email
+            }
+            res.redirect('/admin/articles');
+        } else {
+            res.redirect('/login');
+        }
+    })
+});
+
+router.get('/logout', (req, res) => {
+    req.session.user = undefined;
+    res.redirect('/');
+})
+
 module.exports = router;
